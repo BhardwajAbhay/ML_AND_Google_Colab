@@ -1,0 +1,47 @@
+from sqlalchemy.orm import session;
+import models, schemas;
+
+# 1) get employees
+
+def get_employees(db: session):
+    return db.query(models.Employee).all()
+
+# 2) get employee
+
+def get_employee(db: session, emp_id: int):
+    return(
+        db.query(models.Employee)
+        .filter(models.Employee.id == emp_id)
+        .first()
+    )
+
+# 3) create employee
+
+def create_employee(db: session, employee: schemas.EmployeeCreate):
+    db_employee = models.Employee(
+        name= employee.name, email= employee.email
+    )
+    db.add(db_employee)
+    db.commit()
+    db.refresh(db_employee)
+    return db_employee
+
+# 4) update employee
+
+def update_employee(db: session,emp_id: int, employee: schemas.EmployeeUpdate):
+    db_employee = db.query(models.Employee).filter(models.Employee.id == emp_id).first()
+    if db_employee:
+        db_employee.name = employee.name
+        db_employee.email = employee.email
+        db.commit()
+        db.refresh(db_employee)
+    return db_employee 
+
+# 5) delete employee
+
+def delete_employee(db: session, emp_id: int):
+    db_employee = db.query(models.Employee).filter(models.Employee.id == emp_id).first()
+    if db_employee:
+        db.delete(db_employee)
+        db.commit()
+    return db_employee
