@@ -16,3 +16,6 @@ async def main():
    print(f'\nTotal time taken: {timer() - start:.2f} s')
 
 asyncio.run(main())
+
+# async : means do the task parellel to each other, if first task take the time of complete then second task is start and first task also move in the background
+# await : it tell the other task to start, means: first task is taking the time start the second task 
